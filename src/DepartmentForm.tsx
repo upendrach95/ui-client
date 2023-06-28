@@ -1,6 +1,19 @@
 import React, {ChangeEvent, FC, FormEvent, useState} from 'react'
-import {TextField, Grid, Button, Typography} from "@mui/material";
-
+import {
+    TextField,
+    Grid,
+    Button,
+    Typography,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    SelectChangeEvent
+} from "@mui/material";
+import axios from 'axios'
+import DialogComponent from './Dialog'
+import {DialogContext} from './DialogContext'
+import StateList from './StateList'
 
 interface FormData
 {
@@ -19,83 +32,186 @@ const initialValues: FormData = {
     zipCode: ''
 }
 
-const DepartmentForm: FC = () => {
-    const[formData, setFormData] = useState<FormData>(initialValues)
+interface DeptProps {
+    URL : string
+}
+
+
+const DepartmentForm: FC<DeptProps> = (props)  => {
+    const [formData, setFormData] = useState<FormData>(initialValues)
     const formErrors: Partial<FormData> = {}
     const [errors, setErrors] = useState<Partial<FormData>>({})
-    const nameRegex =  /^[a-zA-Z0-9]+([a-zA-Z0-9](_|-| )[a-zA-Z0-9])*[a-zA-Z0-9]+$/
-   const handleOnSubmit = (event : FormEvent<HTMLFormElement>) => {
+    const nameRegex = /^[a-zA-Z0-9]+([a-zA-Z0-9](_|-| )[a-zA-Z0-9])*[a-zA-Z0-9]+$/
+    const [show, setShow] = useState<boolean>(false)
+    const [success, setSuccess] = useState<boolean>(false)
+    const [state, setState] = useState<string>('');
+    const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-       if(!formData.name.trim()){
-           formErrors.name= 'Name is required'
-       }else if(formData.name.length < 2){
-           formErrors.name = 'Name cannot be less than 2 characters'
-       }else if(!nameRegex.test(formData.name.trim())){
-           formErrors.name = "Name should be provided in correct format and cannot contain '&,$,?'"
-       } else if(formData.city.length < 2){
-           formErrors.city = 'City cannot be less than 2 characters'
-       }else if(formData.state.length < 2){
-           formErrors.state = 'State cannot be less than 2 characters'
-       }else if(formData.country.length < 2){
-           formErrors.country = 'Country cannot be less than 2 characters'
-       }else if(formData.zipCode.length < 2){
-           formErrors.zipCode = 'Zipcode cannot be less than 5 characters'
-       }
-       if(Object.keys(formErrors).length<2){
-           setErrors(formErrors)
-           return
-       }
-}
+        if (!formData.name.trim()) {
+            formErrors.name = 'Name is required'
+        } else if (formData.name.length < 2) {
+            formErrors.name = 'Name cannot be less than 2 characters'
+        }
+        if (!formData.city.trim()) {
+            formErrors.city = 'City is required'
+        } else if (!nameRegex.test(formData.city.trim())) {
+            formErrors.city = 'City cannot be less than 2 characters'
+        }
+        if (!formData.state.trim()) {
+            formErrors.state = 'State is required'
+        } else if (formData.state.length < 2) {
+            formErrors.state = 'State cannot be less than 2 characters'
+        }
+        if (!formData.country.trim()) {
+            formErrors.country = 'Country is required'
+        } else if (formData.country.length < 2) {
+            formErrors.country = 'Country cannot be less than 2 characters'
+        }
+        if (!formData.zipCode.trim()) {
+            formErrors.zipCode = 'ZipCode is required'
+        } else if (formData.zipCode.length < 2) {
+            formErrors.zipCode = 'Zipcode cannot be less than 5 characters'
+        }
+        if (Object.keys(formErrors).length > 0) {
+            setErrors(formErrors)
+            return
+        }
+        const payload = {
+            'name': formData.name,
+            'state': formData.state,
+            'city': formData.city,
+            'country': formData.country,
+            'zipCode': formData.zipCode
+        }
 
-const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
- const {name, value} = event.target
-    setFormData((prevFormData: FormData) => ({
-        ...prevFormData,
-        [name]: value
-    }))
-}
+        console.log(JSON.stringify(payload, null, 2))
 
-const clearForm = () =>{
+
+        console.log(formData)
+
+        axios.post(props.URL, JSON.stringify(payload, null, 2),{
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            console.log(response.data)
+            if(response.status === 201){
+                setSuccess(true)
+                setShow(true)
+            }else{
+                console.log(response)
+                handleOnError()
+            }
+        }).catch(error => {
+            console.error(error)
+            handleOnError()
+        })
+
+       /* axios.get('http://localhost:8080/department-service')
+            .then(response => {
+                console.log(response)
+                if(response.status === 200){
+                    setSuccess(true)
+                    setShow(true)
+                }else{
+                    handleOnError()
+                }
+            }).catch(error => {
+                console.log(error)
+                handleOnError()
+        })*/
+    }
+
+    const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target
+        setFormData((prevFormData: FormData) => ({
+            ...prevFormData,
+            [name]: value,
+
+        }))
+        setErrors((prevFormData: Partial<FormData>) => ({
+            ...prevFormData,
+            [name]: ''
+        }))
+    }
+
+
+    const clearForm = () => {
         setFormData(initialValues)
         setErrors({})
-}
+    }
+
+    const handleOnError = () => {
+        setShow(true)
+        setSuccess(false)
+    }
+
+    const value = {show,setShow,success,setSuccess}
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setState(event.target.value as string);
+    };
 
 
-    return(
-        <div style={{margin: '2em'}}>
-          <form onSubmit={handleOnSubmit} style={{maxWidth: '50em'}}>
-             <Typography variant='h5' style={{letterSpacing: '0.1em'}}>Department Form</Typography>
-              <TextField label='Name' name='name' value={formData.name}
-              onChange={handleOnChange} error={!!errors.name} helperText={errors.name}
-              fullWidth margin='normal' inputProps={{maxLenght: 50}}/>
+        return (
+            <div style={{margin: '2em'}}>
+                <form onSubmit={handleOnSubmit} style={{maxWidth: '50em'}}>
+                    <Typography variant='h5' style={{letterSpacing: '0.1em'}}>Department Form</Typography>
 
-              <TextField label='City' name='city' value={formData.city}
-              onChange={handleOnChange} error={!!errors.city} helperText={errors.city}
-              fullWidth margin='normal' inputProps={{maxLenght: 50}}/>
+                    {show && <DialogContext.Provider value={value}>
+                        <DialogComponent/>
+                    </DialogContext.Provider>
 
-              <TextField label='State' name='state' value={formData.state}
-              onChange={handleOnChange} error={!!errors.state} helperText={errors.state}
-              fullWidth margin='normal' inputProps={{maxLenght: 50}}/>
+                    }
 
-              <TextField label='Country' name='country' value={formData.country}
-              onChange={handleOnChange} error={!!errors.country} helperText={errors.country}
-              fullWidth margin='normal' inputProps={{maxLenght: 50}}/>
 
-              <TextField label='Zip Code' name='zipCode' value={formData.zipCode}
-              onChange={handleOnChange} error={!!errors.zipCode} helperText={errors.zipCode}
-              fullWidth margin='normal' inputProps={{maxLenght: 50}}/>
+                    <TextField label='Name' name='name' value={formData.name}
+                               onChange={handleOnChange} error={!!errors.name} helperText={errors.name}
+                               fullWidth margin='normal' inputProps={{maxLength: 50}}/>
 
-              <Grid container direction='row' spacing={4}>
-                  <Grid item>
-                      <Button size='small' variant='contained' type='submit' style={{minWidth:'10em'}}>SUBMIT</Button>
-                  </Grid>
-                  <Grid item>
-                      <Button size='small' onClick = {clearForm} variant='outlined' style={{minWidth:'10em'}}>CLEAR</Button>
-                  </Grid>
-              </Grid>
-          </form>
-        </div>
-    )
-}
+                    <TextField label='State' name='state' value={formData.state}
+                               onChange={handleOnChange} error={!!errors.state} helperText={errors.state}
+                               fullWidth margin='normal' inputProps={{maxLength: 50}}/>
+
+                    {/*<FormControl fullWidth>*/}
+                    {/*    <InputLabel >State</InputLabel>*/}
+                    {/*    <Select*/}
+                    {/*        labelId="demo-simple-select-label"*/}
+                    {/*        id="demo-simple-select"*/}
+                    {/*        value={formData.state}*/}
+                    {/*        label="state"*/}
+                    {/*        onChange={handleChange}*/}
+                    {/*    >*/}
+                    {/*    <StateList/>*/}
+
+                    {/*    </Select>*/}
+                    {/*</FormControl>*/}
+
+                    <TextField label='City' name='city' value={formData.city}
+                               onChange={handleOnChange} error={!!errors.city} helperText={errors.city}
+                               fullWidth margin='normal' inputProps={{maxLength: 50}}/>
+
+                    <TextField label='Country' name='country' value={formData.country}
+                               onChange={handleOnChange} error={!!errors.country} helperText={errors.country}
+                               fullWidth margin='normal' inputProps={{maxLength: 50}}/>
+
+                    <TextField label='Zip Code' name='zipCode' value={formData.zipCode}
+                               onChange={handleOnChange} error={!!errors.zipCode} helperText={errors.zipCode}
+                               fullWidth margin='normal' inputProps={{maxLength: 50}}/>
+
+                    <Grid container direction='row' spacing={4}>
+                        <Grid item>
+                            <Button size='small' variant='contained' type='submit'
+                                    style={{minWidth: '10em'}}>SUBMIT</Button>
+                        </Grid>
+                        <Grid item>
+                            <Button size='small' onClick={clearForm} variant='outlined'
+                                    style={{minWidth: '10em'}}>CLEAR</Button>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+        )
+    }
 
 export default DepartmentForm
