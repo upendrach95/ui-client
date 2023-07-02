@@ -13,7 +13,7 @@ import {
 import axios from 'axios'
 import DialogComponent from './Dialog'
 import {DialogContext} from './DialogContext'
-import StateList from './StateList'
+
 
 interface FormData
 {
@@ -148,9 +148,26 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
 
     const value = {show,setShow,success,setSuccess}
 
-    const handleChange = (event: SelectChangeEvent) => {
-        setState(event.target.value as string);
-    };
+
+    const stateList = [
+        'Arizona',
+        'California',
+        'Illinois',
+        'New York',
+        'New Jersey'
+    ];
+
+    const handleSelectOnChange = (event: SelectChangeEvent) =>{
+        const {name, value} = event.target
+        setFormData((prevFormData: FormData) => ({
+            ...prevFormData,
+            [name]: value
+        }))
+        setErrors((prevErrors: Partial<FormData>) => ({
+            ...prevErrors,
+            [name]: ''
+        }))
+    }
 
 
         return (
@@ -169,23 +186,26 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
                                onChange={handleOnChange} error={!!errors.name} helperText={errors.name}
                                fullWidth margin='normal' inputProps={{maxLength: 50}}/>
 
-                    <TextField label='State' name='state' value={formData.state}
-                               onChange={handleOnChange} error={!!errors.state} helperText={errors.state}
-                               fullWidth margin='normal' inputProps={{maxLength: 50}}/>
+                    {/*<TextField label='State' name='state' value={formData.state}*/}
+                    {/*           onChange={handleOnChange} error={!!errors.state} helperText={errors.state}*/}
+                    {/*           fullWidth margin='normal' inputProps={{maxLength: 50}}/>*/}
 
-                    {/*<FormControl fullWidth>*/}
-                    {/*    <InputLabel >State</InputLabel>*/}
-                    {/*    <Select*/}
-                    {/*        labelId="demo-simple-select-label"*/}
-                    {/*        id="demo-simple-select"*/}
-                    {/*        value={formData.state}*/}
-                    {/*        label="state"*/}
-                    {/*        onChange={handleChange}*/}
-                    {/*    >*/}
-                    {/*    <StateList/>*/}
-
-                    {/*    </Select>*/}
-                    {/*</FormControl>*/}
+                    <FormControl fullWidth>
+                        <InputLabel >State</InputLabel>
+                        <Select
+                            name = "state"
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={formData.state}
+                            label="state"  onChange={handleSelectOnChange}>
+                            <MenuItem value=" "> </MenuItem>
+                            {stateList.map((state) => (
+                                <MenuItem key={state} value={state}>
+                                    {state}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
 
                     <TextField label='City' name='city' value={formData.city}
                                onChange={handleOnChange} error={!!errors.city} helperText={errors.city}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {FC} from "react";
 import {Card, CardActions, CardContent, Button, Typography, Grid, useTheme, useMediaQuery} from '@mui/material';
-import {CustomCard, CustomCardContent} from "./ComponentsRepository";
+import {Container, CustomCard, CustomCardContent} from "./ComponentsRepository";
 
 
 const Cards: FC = () => {
@@ -11,7 +11,7 @@ const Cards: FC = () => {
     const isLgScreen = useMediaQuery(theme.breakpoints.up('lg'))
 
     return (
-        <div style={{margin: 20}}>
+        <Container>
             <Grid container justifyContent='flex-start' spacing={isMdScreen ? 2 : 4}
                   direction={isSmScreen ? 'column' : 'row'}>
                 <Grid item sx= {{flexGrow: 1 , flexBasis: '25%'}}>
@@ -42,7 +42,7 @@ const Cards: FC = () => {
                     </CustomCard>
                     {/*</Card>*/}
                 </Grid>
-                <Grid item sx= {{flexGrow: 1 , flexBasis: '25%'}} >
+                <Grid  item  sx= {{flexGrow: 1 , flexBasis: '25%'}}>
                     <CustomCard>
                         <CustomCardContent style={{height: '3em'}}>
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -55,7 +55,7 @@ const Cards: FC = () => {
                     </CustomCard>
                 </Grid>
             </Grid>
-        </div>
+        </Container>
     )
 }
 export default Cards
