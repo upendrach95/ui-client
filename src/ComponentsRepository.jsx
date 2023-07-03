@@ -9,28 +9,25 @@ export const CustomCardContent = muiStyled(CardContent)({
 
 export const CustomCard = muiStyled(Card)(({theme}) => ({
 
-    [theme.breakpoints.up('md')]: {
-        minWidth: '15em',
+    [theme.breakpoints.down('sm')]: {
+        minWidth: '10em',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: "yellow orange",
+        maxHeight : '10em'
 
     },
     minWidth: '5em',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: "yellow orange"
+    backgroundColor: "yellow orange",
+    height : '10em'
 }))
 
 export const Container = styled.div({
     margin : '2em'
 });
 
-//  export const useStyles = makeStyles({
-//     root: {
-//         minWidth: 275,
-//         border: "1px solid",
-//         padding: "10px",
-//         boxShadow: "5px 10px red"
-//     },
-//
-// })
 
