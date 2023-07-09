@@ -4,6 +4,7 @@ import {useTheme} from '@mui/material/styles'
 import GridCard1 from "./GridCards/GridCard1";
 import GridCard2 from "./GridCards/GridCard2";
 import GridCard3 from "./GridCards/GridCard3";
+import AppBarComponent from "./AppBarComponent";
 
 interface UserProps {
     URL: string
@@ -21,6 +22,7 @@ const GridCardForm: FC<UserProps> = (props) => {
 
     return (
         <>
+
             <Grid container spacing={2} bgcolor={isSmScreen ? "lightgreen" : isMdScreen ? "orange" : "yellow"}>
 
                 <Grid item sx={{flexGrow: 1}}>

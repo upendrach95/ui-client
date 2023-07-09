@@ -1,27 +1,27 @@
 import React, {ChangeEvent, FC, FormEvent, useState} from 'react'
 import {
-    TextField,
-    Grid,
     Button,
-    Typography,
-    Select,
-    MenuItem,
     FormControl,
+    Grid,
     InputLabel,
-    SelectChangeEvent
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+    Typography
 } from "@mui/material";
 import axios from 'axios'
 import DialogComponent from './Dialog'
 import {DialogContext} from './DialogContext'
+import AppBarComponent from "./AppBarComponent";
 
 
-interface FormData
-{
-    name : string
-    city : string
-    state : string
-    country : string
-    zipCode : string
+interface FormData {
+    name: string
+    city: string
+    state: string
+    country: string
+    zipCode: string
 }
 
 const initialValues: FormData = {
@@ -33,11 +33,11 @@ const initialValues: FormData = {
 }
 
 interface DeptProps {
-    URL : string
+    URL: string,
+    window?: () => Window;
 }
 
-
-const DepartmentForm: FC<DeptProps> = (props)  => {
+const DepartmentForm: FC<DeptProps> = (props) => {
     const [formData, setFormData] = useState<FormData>(initialValues)
     const formErrors: Partial<FormData> = {}
     const [errors, setErrors] = useState<Partial<FormData>>({})
@@ -89,16 +89,16 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
 
         console.log(formData)
 
-        axios.post(props.URL, JSON.stringify(payload, null, 2),{
-            headers:{
+        axios.post(props.URL, JSON.stringify(payload, null, 2), {
+            headers: {
                 'Content-Type': 'application/json'
             }
         }).then(response => {
             console.log(response.data)
-            if(response.status === 201){
+            if (response.status === 201) {
                 setSuccess(true)
                 setShow(true)
-            }else{
+            } else {
                 console.log(response)
                 handleOnError()
             }
@@ -107,19 +107,19 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
             handleOnError()
         })
 
-       /* axios.get('http://localhost:8080/department-service')
-            .then(response => {
-                console.log(response)
-                if(response.status === 200){
-                    setSuccess(true)
-                    setShow(true)
-                }else{
-                    handleOnError()
-                }
-            }).catch(error => {
-                console.log(error)
-                handleOnError()
-        })*/
+        /* axios.get('http://localhost:8080/department-service')
+             .then(response => {
+                 console.log(response)
+                 if(response.status === 200){
+                     setSuccess(true)
+                     setShow(true)
+                 }else{
+                     handleOnError()
+                 }
+             }).catch(error => {
+                 console.log(error)
+                 handleOnError()
+         })*/
     }
 
     const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -146,7 +146,7 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
         setSuccess(false)
     }
 
-    const value = {show,setShow,success,setSuccess}
+    const value = {show, setShow, success, setSuccess}
 
 
     const stateList = [
@@ -157,7 +157,7 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
         'New Jersey'
     ];
 
-    const handleSelectOnChange = (event: SelectChangeEvent) =>{
+    const handleSelectOnChange = (event: SelectChangeEvent) => {
         const {name, value} = event.target
         setFormData((prevFormData: FormData) => ({
             ...prevFormData,
@@ -169,8 +169,8 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
         }))
     }
 
-
-        return (
+    return (
+        <>
             <div style={{margin: '2em'}}>
                 <form onSubmit={handleOnSubmit} style={{maxWidth: '50em'}}>
                     <Typography variant='h5' style={{letterSpacing: '0.1em'}}>Department Form</Typography>
@@ -191,13 +191,13 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
                     {/*           fullWidth margin='normal' inputProps={{maxLength: 50}}/>*/}
 
                     <FormControl fullWidth>
-                        <InputLabel >State</InputLabel>
+                        <InputLabel>State</InputLabel>
                         <Select
-                            name = "state"
+                            name="state"
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={formData.state}
-                            label="state"  onChange={handleSelectOnChange}>
+                            label="state" onChange={handleSelectOnChange}>
                             <MenuItem value=" "> </MenuItem>
                             {stateList.map((state) => (
                                 <MenuItem key={state} value={state}>
@@ -231,7 +231,10 @@ const DepartmentForm: FC<DeptProps> = (props)  => {
                     </Grid>
                 </form>
             </div>
-        )
-    }
+        </>
+    )
+
+}
+
 
 export default DepartmentForm

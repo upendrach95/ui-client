@@ -3,19 +3,24 @@ import Cards from './Cards'
 import DepartmentForm from "./DepartmentForm";
 import DepartmentTable from "./DepartmentTable";
 import GridCardForm from './GridCardForm'
+import AppBarComponent from "./AppBarComponent";
+import React from "react";
 
 
 const App = () => {
-    const URL : string = 'http://localhost:8080/department';
+    const URL: string = 'http://localhost:8080/department';
     return (
-        <Router>
-            <Routes>
-                <Route path = '/' element = {<Cards URL ={URL}/>}/>
-                <Route path='department-form' element={<DepartmentForm URL={URL}/>}/>
-                <Route path='/department-table' element={<DepartmentTable URL={URL}/>}/>
-                <Route path='/grid-card-form' element={<GridCardForm URL ={URL}/>}/>
-            </Routes>
-        </Router>
+        <>
+            <AppBarComponent/>
+            <Router>
+                <Routes>
+                    <Route path='/' element={<Cards URL={URL}/>}/>
+                    <Route path='department-form' element={<DepartmentForm URL={URL}/>}/>
+                    <Route path='/department-table' element={<DepartmentTable URL={URL}/>}/>
+                    <Route path='/grid-card-form' element={<GridCardForm URL={URL}/>}/>
+                </Routes>
+            </Router>
+        </>
     );
 }
 
