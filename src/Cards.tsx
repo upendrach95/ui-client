@@ -30,21 +30,25 @@ const Cards: FC<Props> = (props) => {
 
     return (
         <>
-            <Container>
-                <CssBaseline />
-                <Toolbar />
-                <Grid container justifyContent="flex-start" spacing={2} direction={isSmScreen ? 'column-reverse' : 'row'}>
-                    <Grid item sx={{ flexGrow: 1, flexBasis: '25%' }}>
-                        <Typography>
-                            ReactJS is widely used in the development of single-page applications (SPAs) and
-                            is a core technology in many web development frameworks and libraries.
-                            It provides a powerful and flexible foundation for building modern, interactive,
-                            and efficient user interfaces.
-                        </Typography>
-                    </Grid>
+            <Container >
+                <CssBaseline/>
+                <Toolbar/>
+                <Grid container justifyContent="flex-start" spacing={4}>
+                    <Grid item>
+                        <Grid container  justifyContent="space-between" direction={isSmScreen ? 'column-reverse' : 'row'} spacing={2}>
+                            <Grid item sx={{flexGrow: 1, flexBasis: '25%'}} marginTop={isSmScreen ? '10em' : 'none'}>
+                                <Typography>
+                                    ReactJS is widely used in the development of single-page applications (SPAs) and
+                                    is a core technology in many web development frameworks and libraries.
+                                    It provides a powerful and flexible foundation for building modern, interactive,
+                                    and efficient user interfaces.
+                                </Typography>
+                            </Grid>
 
-                    <Grid item sx={{ flexGrow: 1, flexBasis: '25%' }} maxWidth="10em" maxHeight="10em">
-                        <img src={logo} alt="img" />
+                            <Grid item sx={{flexGrow: 1, flexBasis: '25%', minWidth : '10em' , minHeight :'10em'}} >
+                                <img src={logo} alt="img"/>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
 
