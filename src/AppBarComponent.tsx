@@ -16,7 +16,7 @@ import {useTheme} from "@mui/material/styles";
 
 
 
-const drawerWidth = 240;
+const drawerWidth = 230;
 const navItems = ['Home', 'Form', 'Table', 'Grid'];
 const currentPage = window.location.pathname;
 
