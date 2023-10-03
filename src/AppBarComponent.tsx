@@ -2,22 +2,20 @@ import React, {FC} from 'react';
 import {
     AppBar,
     Box,
-    Button, createTheme,
+    Button,
     Divider,
     Drawer,
     IconButton,
     List,
-    ListItem, makeStyles,
+    ListItem,
     Toolbar,
-    Typography, useMediaQuery
+    Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import {useTheme} from "@mui/material/styles";
-
 
 
 const drawerWidth = 230;
-const navItems = ['Home', 'Form', 'Table', 'Grid'];
+
 const currentPage = window.location.pathname;
 
 interface Props {
@@ -25,13 +23,6 @@ interface Props {
 }
 
 const AppBarComponent: FC<Props> = (props: Props) => {
-    const theme = useTheme()
-    const isSmScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'))
-    const isMdScreen = useMediaQuery(theme.breakpoints.between('md', 'lg'))
-    const isLgScreen = useMediaQuery(theme.breakpoints.up('lg'))
-    const isExtraSmall = useMediaQuery(theme.breakpoints.down('sm'))
-
-
 
     const {window} = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -91,9 +82,9 @@ const AppBarComponent: FC<Props> = (props: Props) => {
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        sx={{mr: 2, display: {sm: 'none'}}}
+                        sx={{mr: 2, display: {md: 'none'}}}
                     >
-                        <MenuIcon/>
+                        <MenuIcon />
                     </IconButton>
                     <Typography
                         variant="h6"
@@ -134,11 +125,11 @@ const AppBarComponent: FC<Props> = (props: Props) => {
                    open={mobileOpen}
                    onClose={handleDrawerToggle}
                    ModalProps={{
-                       keepMounted: true, // Better open performance on mobile.
+                       keepMounted: true,
                    }}
                    sx={{
-                       display: {xs: 'block', sm: 'none'},
-                       '& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth},
+                       display: {xs: 'block', md: 'none'},
+                       '& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth ,  position : 'relative', zIndex:1100},
                    }}
                >
                    {drawer}

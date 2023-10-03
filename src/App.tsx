@@ -11,11 +11,11 @@ const App = () => {
     const URL: string = 'http://localhost:8080/department';
     return (
         <>
-            <AppBarComponent/>
+            <AppBarComponent />
             <Router>
                 <Routes>
                     <Route path='/' element={<Cards URL={URL}/>}/>
-                    <Route path='department-form' element={<DepartmentForm URL={URL}/>}/>
+                    <Route path='/department-form' element={<DepartmentForm URL={URL}/>}/>
                     <Route path='/department-table' element={<DepartmentTable URL={URL}/>}/>
                     <Route path='/grid-card-form' element={<GridCardForm URL={URL}/>}/>
                 </Routes>

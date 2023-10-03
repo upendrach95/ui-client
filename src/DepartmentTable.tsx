@@ -1,7 +1,6 @@
 import React,{FC,useState, useEffect, MouseEvent, ChangeEvent} from 'react'
 import axios from 'axios'
 import {TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TablePagination} from'@mui/material'
-import AppBarComponent from './AppBarComponent'
 interface Department {
     name : string
     city : string
@@ -18,15 +17,12 @@ const DepartmentTable : FC <DeptProps>= (props) => {
     const [deptData, setDeptData] = useState<Department[]>([])
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-//   const[count,setCount] = useState<number>(0)
+
 
     useEffect(() => {
         getData()
     },[])
 
-//    useEffect(() => {
-//       getData()
-//    }, [count])
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -49,7 +45,7 @@ const DepartmentTable : FC <DeptProps>= (props) => {
                 country: item.country,
                 zipCode : item.zipCode
             }))
-//       console.log(response.data)
+
             setDeptData(mappedData)
         }catch(error){
             console.error(error)

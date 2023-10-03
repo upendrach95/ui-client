@@ -35,7 +35,7 @@ const Cards: FC<Props> = (props) => {
                 <Toolbar/>
                 <Grid container justifyContent="flex-start" spacing={4}>
                     <Grid item>
-                        <Grid container  justifyContent="space-between" direction={isSmScreen ? 'column-reverse' : 'row'} spacing={2}>
+                        <Grid container  justifyContent="space-between" direction = {isSmScreen ? 'column-reverse' : 'row'} spacing={2}>
                             <Grid item sx={{flexGrow: 1, flexBasis: '25%'}} marginTop={isSmScreen ? '10em' : 'none'}>
                                 <Typography>
                                     ReactJS is widely used in the development of single-page applications (SPAs) and
